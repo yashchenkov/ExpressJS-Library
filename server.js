@@ -1,98 +1,36 @@
 import Book from './elements/Book.js';
 import express from 'express';
+import {router} from './routes/api.js';
 
 
-const store = {
-	books: [
-	  new Book(),
-	  new Book()
-	]
-}
+
 
 const app = express();
 app.use(express.json());
 
+
+
+app.use('/', router);
+app.use('/public', express.static('/public'));
+/*
 //авторизация пользователя
-app.post('/api/user/login', (req, res) => {
-	res.status(201)
-    res.json({
-    	id: 1,
-    	mail: "test@mail.ru"
-    })
-});
+app.use('/api/user/login', router);
 
 //получить все книги
-app.get('/api/books', (req, res) => {
-	const {books} = store;
-	res.status(201);
-	res.json(books);
-});
+app.use('/api/books', router);
 
 //получить книгу по id
-app.get('/api/books/:id', (req, res) => {
-	const {books} = store;
-	const {id} = req.params;
-	const index = books.findIndex(el => el.id === id);
-	if(index !== -1) {
-		res.status(201);
-	    res.json(books[index]);
-	} else {
-		res.status(404);
-		res.json('404 | книга не найдена');
-	}
-});
+app.use('/api/books/:id', router);
 
 //создать книгу
-app.post('/api/books', (req, res) => {
-	const {books} = store;
-	const newBook = new Book();
-
-	books.push(newBook);
-
-	res.status(201);
-	res.json(newBook);
-})
+app.use('/api/books', router);
 
 //редактировать книгу по id
-app.post('/api/books/:id', (req, res) => {
-	const {books} = store;
-	const {title, description, authors, favorite, fileCover, fileName} = req.body;
-	const {id} = req.params;
-	const index = books.findIndex(el => el.id === id);
-
-	if(index !== -1) { 
-		books[index] = {
-			...books[index],
-			title,
-			description,
-			authors,
-			favorite,
-			fileCover,
-			fileName
-		}
-		res.status(201);
-		res.json(books[index]);
-	} else {
-		res.status(404);
-		res.json('404 | книга не найдена');
-	}
-});
+app.use('/api/books/:id', router);
 
 //удалить книгу по id
-app.delete('/api/books/:id', (req, res) => {
-	const {books} = store;
-	const {id} = req.params;
-	const index = books.findIndex(el => el.id === id);
-
-	if(index !== -1) {
-		books.splice(index, 1);
-		res.status(201);
-		res.json('ok');
-	} else {
-		res.status(404);
-		res.json('404 | книга не найдена');
-	}
-});
+app.use('/api/books/:id', router);
+*/
 
 const PORT = process.env.PORT || 3000
 app.listen(PORT);
