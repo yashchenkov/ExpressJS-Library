@@ -27,12 +27,12 @@ router.post('/api/user/login', (req, res) => {
 router.get('/api/books', (req, res) => {
 	console.log(req.url);
 	const {books} = store;
-	books.forEach(el => {
+	/*books.forEach(el => {
 		fs.writeFile(`public/${el.id}.json`, JSON.stringify(el), (err) => {
 			if (err) throw err;
 			console.log('file created');
 		})
-	})
+	})*/
 	res.status(201);
 	res.send(books);
 });
@@ -55,6 +55,15 @@ router.get('/api/books/:id', (req, res) => {
 router.post('/api/books', stor.single('book'), (req, res) => {
 	const {books} = store;
 	const newBook = new Book();
+	console.log('api')
+	
+	newBook.fileBook = `${req.file.originalname}`;
+	console.log(req.file);
+
+	/*fs.writeFile(`public/${newBook.id}.json`, JSON.stringify(newBook), (err) => {
+		if (err) throw err;
+		console.log('file created');
+	})*/
 
 	books.push(newBook);
 
@@ -106,9 +115,16 @@ router.delete('/api/books/:id', (req, res) => {
 //скачать книгу по id
 router.get('/api/books/:id/download', (req, res) => {
 	const {id, url} = req.params;
+	const {books} = store;
+	let name;
+	books.forEach(el => {
+		if(el.id === id){
+			name = el.fileBook;
+		}
+	});
 	
-	router.use(`/public/${id}.json`, (err) => {
-		if(err) throw err;
+	console.log(name);
+	res.download(`public/${name}`, 'book', () => {
 		console.log('done');
 	})
 });
