@@ -38,13 +38,20 @@ router.get('/api/books', (req, res) => {
 });
 
 //получить книгу по id
-router.get('/api/books/:id', (req, res) => {
+router.get('/api/books/:id',  (req, res) => {
 	const {books} = store;
 	const {id} = req.params;
 	const index = books.findIndex(el => el.id === id);
 	if(index !== -1) {
 		res.status(201);
 	    res.json(books[index]);
+	    fetch(`http://localhost:81/counter/${id}/incr`,{method: 'POST'})
+	      .then((response) => {
+	      	response.json()
+	      	console.log('im here')
+	      })
+	      .then((data) => console.log('ok'))
+
 	} else {
 		res.status(404);
 		res.json('404 | книга не найдена');
