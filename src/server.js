@@ -1,6 +1,7 @@
 import Book from './elements/Book.js';
 import express from 'express';
 import {router} from './routes/api.js';
+import mongoose from 'mongoose';
 
 
 
@@ -32,5 +33,16 @@ app.use('/api/books/:id', router);
 app.use('/api/books/:id', router);
 */
 
+async function start(PORT, UrlDB) {
+	try {
+		await mongoose.connect(UrlDB);
+		app.listen(PORT);
+	} catch(e) {
+		console.log(e);
+	}
+}
+
 const PORT = process.env.PORT || 3000
-app.listen(PORT);
+const UrlDB = process.env.UrlDB;
+console.log(UrlDB);
+start(PORT, UrlDB);
