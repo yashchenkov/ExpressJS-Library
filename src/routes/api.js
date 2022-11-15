@@ -3,6 +3,7 @@ import Book from '../elements/Book.js';
 import {stor} from '../middleware/file.js';
 import fs from 'fs';
 import {modell} from '../models/BookModelDB.js';
+import container from '../elements/container.js';
 
 export const router = express.Router();
 
@@ -27,26 +28,21 @@ router.post('/api/user/login', (req, res) => {
 //получить все книги
 router.get('/api/books', async (req, res) => {
 	try {
+		const repo = container.get(BookRepository);
+		console.log(repo);
 		const books = await modell.find().select('-__v');
 		res.status(201).json(books)
 	} catch(e) {
 		res.status(500).json(e);
 	}
-	/*const {books} = store;
-	books.forEach(el => {
-		fs.writeFile(`public/${el.id}.json`, JSON.stringify(el), (err) => {
-			if (err) throw err;
-			console.log('file created');
-		})
-	})
-	res.status(201);
-	res.send(books);*/
 });
 
 //получить книгу по id
 router.get('/api/books/:id', async (req, res) => {
 	const {id} = req.params;
 	try {
+		const repo = container.get(BookRepository);
+		console.log(repo);
 		const books = await modell.findById(id).select('-__v');
 		res.status(201).json(books);
 	} catch(e) {
@@ -74,6 +70,8 @@ router.get('/api/books/:id', async (req, res) => {
 router.post('/api/books', async (req, res) => {
 	const {id, title, description, authors, favorite, fileCover, fileName, fileBook} = req.body;
 	const newBook = new modell({id, title, description, authors, favorite, fileCover, fileName, fileBook});
+	const repo = container.get(BookRepository);
+	console.log(repo);
 
 	try {
 		await newBook.save();
@@ -98,7 +96,9 @@ router.post('/api/books', async (req, res) => {
 router.put('/api/books/:id', async (req, res) => {
     const {id} = req.params;
 	const {title, description, authors, favorite, fileCover, fileName} = req.body;
-	
+	const repo = container.get(BookRepository);
+	console.log(repo);
+
 	try {
 		await modell.findByIdAndUpdate(id, {title, description, authors, favorite, fileCover, fileName});
 		res.redirect(`/api/books/${id}`);
@@ -129,6 +129,8 @@ router.put('/api/books/:id', async (req, res) => {
 //удалить книгу по id
 router.delete('/api/books/:id', async (req, res) => {
 	const {id} = req.params;
+	const repo = container.get(BookRepository);
+	console.log(repo);
 	try {
 		await modell.deleteOne({_id: id});
 		res.json(true);

@@ -1,6 +1,6 @@
 import BookInterface from '../interfaces/BooksInterface';
 
-class Book implements BookInterface{
+export default class BookRepository implements BookInterface{
 	id: string
 	title: string
 	description: string
