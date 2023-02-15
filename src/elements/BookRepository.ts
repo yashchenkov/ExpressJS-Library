@@ -9,9 +9,9 @@ export default class BookRepository implements BookInterface{
 	fileCover: string
 	fileName: string
 
-	createBook(book): Book{}
-	getBook(id): Book{}
+	createBook(book: any): Book{}
+	getBook(id: any): Book{}
 	getBooks(): Array{}
-	updateBook(id): boolean{}
-	deleteBook(id): boolean{}
+	updateBook(id: any): boolean{}
+	deleteBook(id: any): boolean{}
 }
